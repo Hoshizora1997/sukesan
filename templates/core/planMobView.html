@@ -1,0 +1,108 @@
+{% extends 'core/base-main.html' %}
+{% load mathfilters %}
+
+{% block contents %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                            <div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
+                                {{ message }}
+                            </div>
+                        {% elif message.tags == 'error' %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <h1 class="border-bottom">{{ plan.title }}の回答入力</h1>
+        <div class="d-flex flex-row-reverse">
+            <p>管理者：{{ plan.admin.first_name }}（{{ plan.admin.username }}）</p>
+        </div>
+        <dl>
+            <dt>説明</dt>
+            <dd>{{ plan.description }}</dd>
+            <dt>場所</dt>
+            <dd>{{ plan.place }}</dd>
+            <dt>所要時間</dt>
+            <dd>{{ plan.hours|div:4 }}時間</dd>
+        </dl>
+        <p>{{ mob.name }}さんの回答を入力してください。各時間マスをクリックする事で状態を変更できます。</p>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">日程</th>
+                        <th scope="col" colspan="{{ frac }}"></th>
+                        {% for n in count %}
+                                <th scope="col" colspan="4">{{ n }}時</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for p in planDetails %}
+                    <tr>
+                        <td rowspan="1">{{ p.date }}</td>
+                        {% for co in countO %}
+                            {% if forloop.parentloop.counter ==  forloop.counter %}
+                                {% for o in co %}
+                                    {% if allStartTime < forloop.counter and forloop.counter <= allEndTime %}
+                                        {% if o == 0 %}
+                                            <td><a href="{% url 'planEdit' p.id mob.id forloop.counter %}">_</a></td>
+                                        {% else %}
+                                            <td style="background-color: rgba(30,126,52,1.0)"><a href="{% url 'planEdit' p.id mob.id forloop.counter %}">◯</a></td>
+                                        {% endif %}
+
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    <!--
+                    <tr>
+                        {% for cn in countN %}
+                            {% if forloop.parentloop.counter ==  forloop.counter %}
+                                {% for n in cn %}
+                                    {% if allStartTime < forloop.counter and forloop.counter <= allEndTime %}
+                                        {% if n == 0 %}
+                                            <td><a href="">_</a></td>
+                                        {% else %}
+                                            <td style="background-color: rgba(255,215,0,1.0)">△</td>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+
+                    <tr>
+                        {% for cx in countX %}
+                            {% if forloop.parentloop.counter ==  forloop.counter %}
+                                {% for x in cx %}
+                                    {% if allStartTime < forloop.counter and forloop.counter <= allEndTime %}
+                                        {% if x == 0 %}
+                                            <td><a href="">_</a></td>
+                                        {% else %}
+                                            <td style="background-color: rgba(220,20,60,1.0)">×</td>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>-->
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'plan' plan.id %}" class="btn btn-success btn-lg btn-block">結果のページに戻る</a>
+    </div>
+
+
+{% endblock %}

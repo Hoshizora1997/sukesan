@@ -1,0 +1,44 @@
+{% extends "core/base-main.html" %}
+{% block contents %}
+    <div class="container">
+    <h1 class="border-bottom">ログイン</h1>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    すでに会員登録がお済みの方
+                </div>
+                <div class="card-body">
+                    <p>テスト期間中は会員登録不要でご利用いただけます。ユーザー名：test パスワード：humaninterface2018</p>
+                    <form action="{% url 'login' %}" method="POST">
+                        <div class="form-group">
+                            {{ form.username }}
+                            {{ form.username.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.password }}
+                            {{ form.password.errors }}
+                        </div>
+                        <input type="submit" class="btn btn-success btn-lg btn-block" value="ログイン">
+                        <input type="hidden" name="next" value={{ next }} />
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    新規会員登録
+                </div>
+                <div class="card-body">
+                    <p>SUKESANで予定を作成するには会員登録・ログインが必要です。</p>
+                    <p>会員登録はメールアドレス・ユーザー名・パスワードのみ、簡単です。</p>
+                    <a href="{% url 'regist' %}" class="btn btn-success btn-lg btn-block">新規会員登録</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

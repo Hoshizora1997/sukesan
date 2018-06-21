@@ -1,0 +1,40 @@
+{% extends 'core/base-main.html' %}
+{% load mathfilters %}
+
+{% block contents %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                            <div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
+                                {{ message }}
+                            </div>
+                        {% elif message.tags == 'error' %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="閉じる"><span aria-hidden="true">×</span></button>
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <h1 class="border-bottom">新しく回答する</h1>
+        <p>回答者のお名前を入力してください。（公開されます。ニックネーム可。）</p>
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="form-group row">
+                <div class="col-sm-2 col-form-label">お名前<small class="text-danger">（必須）</small></div>
+                <div class="col-sm-10">{{ form.name }}{{ form.name.error }}</div>
+            </div>
+
+
+            <input type="submit" class="btn btn-success btn-lg btn-block" value="次へ"/>
+            {% csrf_token %}
+        </form>
+    </div>
+
+
+{% endblock %}
